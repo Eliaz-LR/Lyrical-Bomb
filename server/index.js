@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+const port = process.env.PORT || "8080";
 const { Server } = require("socket.io");
 const cors = require('cors');
 
@@ -10,7 +11,6 @@ const server = http.createServer(app); // Create server with express app
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173", // Allow only this origin, port 5173 is the default port for vite dev server
         methods: ["GET", "POST"]
     }
 }); // Create socket.io server
@@ -24,6 +24,6 @@ io.on('connection', (socket) => {
     })
 });
 
-server.listen(3001, () => {
-    console.log('server listening on port 3001');
+server.listen(port, () => {
+    console.log('server listening on port: ', port);
 });

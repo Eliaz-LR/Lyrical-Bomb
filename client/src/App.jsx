@@ -3,7 +3,8 @@ import './App.css'
 import io from 'socket.io-client'
 import { useEffect, useState } from 'react'
 
-const socket = io.connect('http://localhost:3001') // Connect to the server running on port 3001
+const socket = io.connect('http://localhost:8080')
+// const socket = io.connect('https://lyrical-bomb.fly.dev')
 
 function App() {
   const [message, setMessage] = useState('');
