@@ -10,8 +10,17 @@ function App() {
   const [message, setMessage] = useState('');
   const [messageReceived, setMessageReceived] = useState('');
 
-  const sendMessage = () => {
-    socket.emit('send_message', {message})
+  const [room, setRoom] = useState('');
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    socket.emit('send_message', {message, room})
+    // delete message in input
+    
+  };
+
+  const joinRoom = () => {
+    socket.emit('join_room', {room})
   };
 
   useEffect(() => {
@@ -20,12 +29,21 @@ function App() {
     })
   }, [socket])
 
+  useEffect(() => {
+    joinRoom()
+  }, [room])
+
   return (
     <div className="App">
-      <input placeholder='Message...' onChange={(event) => {
-        setMessage(event.target.value)
+      <input placeholder='Room' onChange={(event) => {
+        setRoom(event.target.value)
       }}/>
-      <button onClick={sendMessage}>Send message</button>
+      <form onSubmit={sendMessage}>
+        <input placeholder='Message...' onChange={(event) => {
+          setMessage(event.target.value)
+        }}/>
+        <button type="submit">Send message</button>
+      </form>
       <h1>Received messages :</h1>
       {messageReceived}
     </div>
