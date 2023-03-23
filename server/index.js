@@ -5,6 +5,8 @@ const port = process.env.PORT || "8080";
 const { Server } = require("socket.io");
 const cors = require('cors');
 
+const uuid = require('uuid').v4;
+
 app.use(cors()); 
 
 const server = http.createServer(app); // Create server with express app
@@ -22,11 +24,18 @@ io.on('connection', (socket) => {
         console.log('user disconnected: ', socket.id);
     });
 
-    socket.on("join_room", (data) => {
-        console.log(data);
-        socket.join(data.room);
-        socket.broadcast.to(data.room).emit("user_joined", data);
+    socket.on('create_room', () => {
+        const roomID = uuid();
+        socket.join(roomID);
+        socket.emit('room_created', {room: roomID});
+        console.log("Room created : ",roomID);
     });
+
+    // socket.on("join_room", (data) => {
+    //     console.log(data);
+    //     socket.join(data.room);
+    //     socket.broadcast.to(data.room).emit("user_joined", data);
+    // });
 
     socket.on('send_message', (data) => {
         console.log(data);

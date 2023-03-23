@@ -7,32 +7,39 @@ const socket = io.connect('http://localhost:8080')
 export const RoomContext = createContext(null);
 
 export const RoomProvider = ({ children }) => {
-    const [message, setMessage] = useState('');
-    const [messageReceived, setMessageReceived] = useState('');
+    // const [message, setMessage] = useState('');
+    // const [messageReceived, setMessageReceived] = useState('');
 
     const [room, setRoom] = useState('');
 
-    const sendMessage = (event) => {
-        event.preventDefault();
-        socket.emit('send_message', {message, room})
-        // delete message in input
-    };
+    // const sendMessage = (event) => {
+    //     event.preventDefault();
+    //     socket.emit('send_message', {message, room})
+    //     // delete message in input
+    // };
 
-    const joinRoom = () => {
-        socket.emit('join_room', {room})
-    };
+    // const joinRoom = () => {
+    //     socket.emit('join_room', {room})
+    // };
+
+    // useEffect(() => {
+    // socket.on('receive_message', (data) => {
+    //     setMessageReceived(data.message)
+    // })
+    // }, [socket])
+
+    // useEffect(() => {
+    //     joinRoom()
+    // }, [room])
 
     useEffect(() => {
-    socket.on('receive_message', (data) => {
-        setMessageReceived(data.message)
-    })
+        socket.on('room_created', (data) => {
+            setRoom(data.room)
+        })
     }, [socket])
 
-    useEffect(() => {
-        joinRoom()
-    }, [room])
     return (
-        <RoomContext.Provider value={{ message, setMessage, messageReceived, setMessageReceived, room, setRoom, sendMessage, joinRoom }}>
+        <RoomContext.Provider value={{ socket, room, setRoom }}>
         {children}
         </RoomContext.Provider>
     );
