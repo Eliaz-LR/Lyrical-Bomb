@@ -1,37 +1,11 @@
 // import reactLogo from './assets/react.svg'
 import './App.css'
-import io from 'socket.io-client'
-import { useEffect, useState } from 'react'
-
-const socket = io.connect('http://localhost:8080')
-// const socket = io.connect('https://lyrical-bomb.fly.dev')
+import { useContext } from 'react';
+import { RoomContext } from './context/RoomContext';
 
 function App() {
-  const [message, setMessage] = useState('');
-  const [messageReceived, setMessageReceived] = useState('');
 
-  const [room, setRoom] = useState('');
-
-  const sendMessage = (event) => {
-    event.preventDefault();
-    socket.emit('send_message', {message, room})
-    // delete message in input
-    
-  };
-
-  const joinRoom = () => {
-    socket.emit('join_room', {room})
-  };
-
-  useEffect(() => {
-    socket.on('receive_message', (data) => {
-      setMessageReceived(data.message)
-    })
-  }, [socket])
-
-  useEffect(() => {
-    joinRoom()
-  }, [room])
+  const { message, setMessage, messageReceived, setMessageReceived, room, setRoom, sendMessage, joinRoom } = useContext(RoomContext)
 
   return (
     <div className="App">
