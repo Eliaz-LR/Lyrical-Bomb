@@ -1,11 +1,8 @@
 // import reactLogo from './assets/react.svg'
 import './App.css'
-import { useContext } from 'react';
-import { RoomContext } from './context/RoomContext';
 
 function App() {
 
-  const { message, setMessage, messageReceived, setMessageReceived, room, setRoom, sendMessage, joinRoom } = useContext(RoomContext)
 
   return (
     <div className="App">

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import io from 'socket.io-client'
 
 const socket = io.connect('http://localhost:8080')
@@ -10,16 +11,12 @@ export const RoomProvider = ({ children }) => {
     // const [message, setMessage] = useState('');
     // const [messageReceived, setMessageReceived] = useState('');
 
-    const [room, setRoom] = useState('');
+    const navigate = useNavigate();
 
     // const sendMessage = (event) => {
     //     event.preventDefault();
     //     socket.emit('send_message', {message, room})
     //     // delete message in input
-    // };
-
-    // const joinRoom = () => {
-    //     socket.emit('join_room', {room})
     // };
 
     // useEffect(() => {
@@ -28,18 +25,18 @@ export const RoomProvider = ({ children }) => {
     // })
     // }, [socket])
 
-    // useEffect(() => {
-    //     joinRoom()
-    // }, [room])
+    const joinRoom = (data) => {
+        navigate(`/room/${data.room}`)
+    };
 
     useEffect(() => {
         socket.on('room_created', (data) => {
-            setRoom(data.room)
+            joinRoom(data)
         })
     }, [socket])
 
     return (
-        <RoomContext.Provider value={{ socket, room, setRoom }}>
+        <RoomContext.Provider value={{ socket }}>
         {children}
         </RoomContext.Provider>
     );

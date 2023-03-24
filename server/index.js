@@ -31,11 +31,11 @@ io.on('connection', (socket) => {
         console.log("Room created : ",roomID);
     });
 
-    // socket.on("join_room", (data) => {
-    //     console.log(data);
-    //     socket.join(data.room);
-    //     socket.broadcast.to(data.room).emit("user_joined", data);
-    // });
+    socket.on("join_room", (data) => {
+        socket.join(data.room);
+        console.log("User joined room : ",data.room);
+        // socket.broadcast.to(data.room).emit("user_joined", data);
+    });
 
     socket.on('send_message', (data) => {
         console.log(data);
