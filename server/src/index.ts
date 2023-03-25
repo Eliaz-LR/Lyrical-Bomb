@@ -4,6 +4,7 @@ import { roomHandler } from './components/roomHandler';
 import http from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import { messageHandler } from './components/messagesHandler';
 
 const app = express();
 const port = process.env.PORT || "8080";
@@ -28,10 +29,7 @@ io.on('connection', (socket : Socket) => {
 
     roomHandler(socket);
 
-    socket.on('send_message', (data) => {
-        console.log(data);
-        socket.broadcast.to(data.roomId).emit('receive_message', data);
-    })
+    messageHandler(socket);
 });
 
 server.listen(port, () => {
