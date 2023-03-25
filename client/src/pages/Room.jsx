@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { RoomContext } from '../context/RoomContext';
+import Chat from "../components/Chat.jsx";
 
 function Home() {
     const { id } = useParams();
@@ -13,6 +14,7 @@ function Home() {
     return (
         <div>
             <h1>Room {id}</h1>
+            <Chat roomId={id}/>
         </div>
     )
 }

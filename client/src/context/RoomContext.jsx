@@ -8,22 +8,9 @@ const socket = io.connect('http://localhost:8080')
 export const RoomContext = createContext(null);
 
 export const RoomProvider = ({ children }) => {
-    // const [message, setMessage] = useState('');
-    // const [messageReceived, setMessageReceived] = useState('');
+
 
     const navigate = useNavigate();
-
-    // const sendMessage = (event) => {
-    //     event.preventDefault();
-    //     socket.emit('send_message', {message, room})
-    //     // delete message in input
-    // };
-
-    // useEffect(() => {
-    // socket.on('receive_message', (data) => {
-    //     setMessageReceived(data.message)
-    // })
-    // }, [socket])
 
     const joinRoom = (data) => {
         navigate(`/room/${data.room}`)
