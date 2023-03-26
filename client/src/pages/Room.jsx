@@ -12,7 +12,7 @@ function Home() {
     }, [id])
     
     return (
-        <div>
+        <div className='flex flex-col items-center h-screen'>
             <h1>Room {id}</h1>
             <Chat roomId={id}/>
         </div>
