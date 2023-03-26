@@ -12,16 +12,17 @@ export default function Chat({roomId}) {
 
     const sendMessage = (event) => {
         event.preventDefault();
-        socket.emit('send_message', {message, roomId})
+        socket.emit('send_message', {message, roomId, user: 'user'})
         console.log(message, "envoyé");
         setMessage('')
+        setMessagesReceived((prev) => [...prev, { id: nextMessageID++, content: message, user: 'YOU' }])
     };
 
     useEffect(() => {
         const receiveMessageCallback = (data) => {
           setMessagesReceived((prev) => [
             ...prev,
-            { id: nextMessageID++, content: data.message },
+            { id: nextMessageID++, content: data.message, user: data.user },
           ]);
         };
     
@@ -42,7 +43,7 @@ export default function Chat({roomId}) {
             </form>
             <h1>Received messages :</h1>
             {messagesReceived.map(message => {
-                    return <div>{message.content}</div>
+                    return <div>{message.user} : {message.content}</div>
             })}
         </div>
     )
