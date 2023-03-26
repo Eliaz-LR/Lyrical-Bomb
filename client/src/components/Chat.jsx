@@ -44,10 +44,6 @@ export default function Chat({roomId}) {
             {messagesReceived.map(message => {
                     return <div>{message.content}</div>
             })}
-
-            <button onClick={() => {
-                console.log(messagesReceived);
-            }}>Log messages</button>
         </div>
     )
 }
