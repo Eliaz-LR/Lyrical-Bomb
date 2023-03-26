@@ -2,8 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import io from 'socket.io-client'
 
-const socket = io.connect('http://localhost:8080')
-// const socket = io.connect('https://lyrical-bomb.fly.dev')
+// const socket = io.connect('http://localhost:8080')
+const socket = io.connect('https://lyrical-bomb.fly.dev')
 
 export const RoomContext = createContext(null);
 
