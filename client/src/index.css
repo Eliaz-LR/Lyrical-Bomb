@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+    body {
+        @apply bg-white text-black border-black dark:bg-zinc-800 dark:text-white dark:border-white;
+    }
     h1 {
         @apply text-4xl block m-2;
     }
@@ -10,7 +13,10 @@
         @apply text-3xl block m-2;
     }
     button {
-        @apply border-2 border-black rounded-md p-2;
+        @apply border-black dark:border-white border-2 rounded-md p-2;
+    }
+    input {
+        @apply bg-transparent;
     }
 }
 
