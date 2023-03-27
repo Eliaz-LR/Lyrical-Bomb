@@ -40,7 +40,7 @@ export default function Chat({roomId}) {
                     return <div key={message.id}>{message.user} : {message.content}</div>
                 })}
             </div>
-            <form onSubmit={sendMessage} className='flex flex-row border-2 border-gray-500'>
+            <form onSubmit={sendMessage} className='flex flex-row border-2 border-gray-500 mb-2'>
                 <input placeholder='Message...' value={message} className='basis-2/3 p-1' onChange={(event) => {
                 setMessage(event.target.value)
                 }}/>
