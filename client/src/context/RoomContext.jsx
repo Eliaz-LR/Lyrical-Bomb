@@ -9,6 +9,7 @@ export const RoomContext = createContext(null);
 
 export const RoomProvider = ({ children }) => {
 
+    const [username, setUsername] = useState('');
 
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export const RoomProvider = ({ children }) => {
     }, [socket])
 
     return (
-        <RoomContext.Provider value={{ socket }}>
+        <RoomContext.Provider value={{ socket, username, setUsername }}>
         {children}
         </RoomContext.Provider>
     );

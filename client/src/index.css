@@ -16,7 +16,12 @@
         @apply border-black dark:border-white border-2 rounded-md p-2;
     }
     input {
-        @apply bg-transparent;
+        @apply bg-transparent border-2 rounded-md p-2 m-2;
     }
 }
 
+@layer components {
+    .window {
+        @apply bg-white dark:bg-zinc-800  border-2 rounded-lg;
+    }
+}

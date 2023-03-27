@@ -5,17 +5,16 @@ import { RoomContext } from '../context/RoomContext';
 let nextMessageID = 0
 
 export default function Chat({roomId}) {
-    const { socket } = useContext(RoomContext)
+    const { socket, username } = useContext(RoomContext)
 
     const [message, setMessage] = useState('');
     const [messagesReceived, setMessagesReceived] = useState([]);
 
     const sendMessage = (event) => {
         event.preventDefault();
-        socket.emit('send_message', {message, roomId, user: 'user'})
-        console.log(message, "envoyé");
+        socket.emit('send_message', {message, roomId, user: username})
         setMessage('')
-        setMessagesReceived((prev) => [...prev, { id: nextMessageID++, content: message, user: 'YOU' }])
+        setMessagesReceived((prev) => [...prev, { id: nextMessageID++, content: message, user: username }])
     };
 
     useEffect(() => {
@@ -38,7 +37,7 @@ export default function Chat({roomId}) {
             <h1>Received messages :</h1>
             <div className='flex flex-col-reverse overflow-auto grow border-2 border-b-0 p-1 border-gray-500'>
                 {[...messagesReceived].reverse().map(message => {
-                    return <div>{message.user} : {message.content}</div>
+                    return <div key={message.id}>{message.user} : {message.content}</div>
                 })}
             </div>
             <form onSubmit={sendMessage} className='flex flex-row border-2 border-gray-500'>
