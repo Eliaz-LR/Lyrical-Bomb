@@ -17,6 +17,8 @@ export default function DarkModeButton() {
     }, [darkMode])
 
     return (
-        <button className="absolute top-0 right-0 m-2" onClick={() => setDarkMode(!darkMode)}>Change theme</button>
+        <div className="flex flex-row-reverse">
+            <button className="m-2" onClick={() => setDarkMode(!darkMode)}>Change theme</button>
+        </div>
     )
 }
