@@ -15,19 +15,19 @@ function Room() {
         setRoom(id)
     }, [id])
 
-    const getRoomUsers = () => {
-        socket.emit('get_room_users', {room: id})
-        return new users(new user(''))
-    }
-
-    const [roomUsers, setRoomUsers] = useState(getRoomUsers)
+    const [roomUsers, setRoomUsers] = useState(new users(new user('')))
 
     useEffect(() => {
         socket.on('room_users_update', (roomUsers) => {
             setRoomUsers(roomUsers)
-            console.log(roomUsers);
         })
     }, [socket])
+
+    useEffect(() => {
+        if (roomUsers === new users(new user(''))) {
+            socket.emit('get_room_users', {room: id})
+        }
+    }, [roomUsers])
 
     
     return (
