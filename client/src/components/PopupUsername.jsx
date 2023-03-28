@@ -9,7 +9,6 @@ export default function PopupUsername() {
     const handleSubmit = (event) => {
         event.preventDefault()
         setUsername(usernameInput)
-        console.log(username);
     }
 
     return (
