@@ -12,9 +12,13 @@ export default function Game({settings, users}) {
     const [width, setWidth] = useState(0)
     const refGameScreen = useRef(null)
     useEffect(() => {
-        setHeight(refGameScreen.current.clientHeight)
-        setWidth(refGameScreen.current.clientWidth)
-        console.log(height, width);
+        function handleResize() {
+            setHeight(refGameScreen.current.clientHeight)
+            setWidth(refGameScreen.current.clientWidth)
+        }
+        window.addEventListener('resize', handleResize)
+        handleResize()
+        return () => window.removeEventListener('resize', handleResize)
     })
 
     const [guess, setGuess] = useState('')

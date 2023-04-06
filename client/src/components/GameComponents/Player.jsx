@@ -9,8 +9,14 @@ function Player({username, widthDiv, heightDiv, num, size}) {
     const [width, setWidth] = useState(0)
     const refPlayer = useRef(null)
     useEffect(() => {
-        setHeight(refPlayer.current.clientHeight)
-        setWidth(refPlayer.current.clientWidth)
+        function handleResize() {
+            setHeight(refPlayer.current.clientHeight)
+            setWidth(refPlayer.current.clientWidth)
+        }
+        
+        window.addEventListener('resize', handleResize)
+        handleResize()
+        return () => window.removeEventListener('resize', handleResize)
     })
 
     return (
