@@ -1,5 +1,6 @@
 import {useState, useContext, useRef, useEffect} from 'react'
 import { RoomContext } from '../context/RoomContext'
+import useSize from "../hooks/useSize"
 import Bomb from './GameComponents/Bomb'
 import Player from './GameComponents/Player'
 
@@ -8,18 +9,7 @@ export default function Game({settings, users}) {
 
     const { socket } = useContext(RoomContext)
 
-    const [height, setHeight] = useState(0)
-    const [width, setWidth] = useState(0)
-    const refGameScreen = useRef(null)
-    useEffect(() => {
-        function handleResize() {
-            setHeight(refGameScreen.current.clientHeight)
-            setWidth(refGameScreen.current.clientWidth)
-        }
-        window.addEventListener('resize', handleResize)
-        handleResize()
-        return () => window.removeEventListener('resize', handleResize)
-    })
+    let {width, height, ref: refGameScreen} = useSize()
 
     const [guess, setGuess] = useState('')
     const sendGuess = (event) => {

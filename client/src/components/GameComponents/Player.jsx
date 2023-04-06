@@ -1,23 +1,11 @@
-import { useRef, useState, useEffect } from "react"
-
+import React, { useRef } from 'react'
+import useSize from "../../hooks/useSize"
 
 function Player({username, widthDiv, heightDiv, num, size}) {
     
     let angle = (num/size) * 2 * Math.PI
 
-    const [height, setHeight] = useState(0)
-    const [width, setWidth] = useState(0)
-    const refPlayer = useRef(null)
-    useEffect(() => {
-        function handleResize() {
-            setHeight(refPlayer.current.clientHeight)
-            setWidth(refPlayer.current.clientWidth)
-        }
-        
-        window.addEventListener('resize', handleResize)
-        handleResize()
-        return () => window.removeEventListener('resize', handleResize)
-    })
+    let {width, height, ref: refPlayer} = useSize()
 
     return (
         <div style={{
