@@ -32,7 +32,7 @@ function Room() {
             <h1>Room {id}, {roomUsers.users.length} users</h1>
             {(username==='') && <PopupUsername />}
             <div className='flex flex-row h-full w-full'>
-                <Game settings={null}/>
+                <Game settings={null} users={roomUsers}/>
                 <Chat roomId={id}/>
             </div>
         </div>
