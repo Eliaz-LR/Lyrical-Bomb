@@ -23,6 +23,9 @@ export const RoomProvider = ({ children }) => {
         socket.on('room_created', (data) => {
             joinRoom(data)
         })
+        return () => {
+            socket.off('room_created')
+        }
     }, [socket])
 
     useEffect(() => {

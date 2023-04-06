@@ -15,20 +15,17 @@ function Room() {
         setRoom(id)
     }, [id])
 
-    const [roomUsers, setRoomUsers] = useState(new users(new user('')))
+    const emptyUsers = new users(new user(''))
+    const [roomUsers, setRoomUsers] = useState(emptyUsers)
 
     useEffect(() => {
         socket.on('room_users_update', (roomUsers) => {
             setRoomUsers(roomUsers)
         })
-    }, [socket])
-
-    useEffect(() => {
-        if (roomUsers === new users(new user(''))) {
-            socket.emit('get_room_users', {room: id})
+        return () => {
+            socket.off('room_users_update');
         }
-    }, [roomUsers])
-
+    }, [socket])
     
     return (
         <div className='flex flex-col items-center h-full'>

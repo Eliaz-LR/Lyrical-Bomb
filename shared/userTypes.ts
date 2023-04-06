@@ -24,7 +24,10 @@ export class users {
     push(user: user) {
         this.users.push(user);
     }
-    findUser(socketID: string): user | undefined {
+    findUserBySocketID(socketID: string): user | undefined {
         return this.users.find((user) => user.socketID === socketID);
+    }
+    findUserByUsername(username: string): user | undefined {
+        return this.users.find((user) => user.username === username);
     }
 }

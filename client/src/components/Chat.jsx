@@ -28,7 +28,7 @@ export default function Chat({roomId}) {
         socket.on('receive_message', receiveMessageCallback);
     
         return () => {
-          socket.removeListener('receive_message', receiveMessageCallback);
+          socket.off('receive_message', receiveMessageCallback);
         }; 
       }, [socket]);
 

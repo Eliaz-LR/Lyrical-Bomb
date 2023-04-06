@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { users, user } from "../../../shared/userTypes";
 import { generateRoomID } from "./room/generateRoomID";
+import { response } from "express";
 
 const rooms = new Map<any,users>();
 
@@ -19,7 +20,7 @@ export const roomHandler = (socket: Socket) => {
         }
         else {
             let roomUsers : users = rooms.get(data.room)!;
-            if (roomUsers.findUser(socket.id) === undefined) {
+            if (roomUsers.findUserBySocketID(socket.id) === undefined) {
                 roomUsers.push(new user(socket.id)); // add user to existing room
                 console.log("NEW USER ADDED TO ROOM : ",data.room);
             }
@@ -28,22 +29,18 @@ export const roomHandler = (socket: Socket) => {
 
     socket.on("username_set", (data) => {
         let roomUsers : users = rooms.get(data.room)!;
-        if (roomUsers.findUser(socket.id)!==undefined) {
-            roomUsers.findUser(socket.id)!.setUsername(data.username);
+        if (roomUsers.findUserBySocketID(socket.id)!==undefined) {
+            roomUsers.findUserBySocketID(socket.id)!.setUsername(data.username);
         }
         console.log("Room users : ",roomUsers);
-        socket.to(data.room).emit("room_users_update", roomUsers);
-    });
-
-    socket.on("get_room_users", (data) => {
-        let roomUsers : users = rooms.get(data.room)!;
+        socket.emit("room_users_update", roomUsers);
         socket.to(data.room).emit("room_users_update", roomUsers);
     });
 
     socket.on("disconnect", () => {
         rooms.forEach((roomUsers, key) => {
-            if (roomUsers.findUser(socket.id) !== undefined) {
-                roomUsers.users.splice(roomUsers.users.indexOf(roomUsers.findUser(socket.id)!), 1);
+            if (roomUsers.findUserBySocketID(socket.id) !== undefined) {
+                roomUsers.users.splice(roomUsers.users.indexOf(roomUsers.findUserBySocketID(socket.id)!), 1);
                 if (roomUsers.users.length === 0) {
                     rooms.delete(key);
                 }
