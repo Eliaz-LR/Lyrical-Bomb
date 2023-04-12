@@ -1,6 +1,6 @@
-import { users } from "../../../../shared/userTypes";
+import { room } from "../../../../shared/userTypes";
 
-export function generateRoomID(rooms : Map<any,users>): string{
+export function generateRoomID(rooms : Map<any,room>): string{
     let roomID = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < 4; i++) {

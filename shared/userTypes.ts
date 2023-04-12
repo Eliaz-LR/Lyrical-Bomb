@@ -21,10 +21,12 @@ export class user {
     }
 }
 
-export class users {
+export class room {
     users: user[];
+    isLaunched: boolean;
     constructor(user: user) {
         this.users = [user];
+        this.isLaunched = false;
     }
     push(user: user) {
         this.users.push(user);

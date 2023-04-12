@@ -4,7 +4,7 @@ import { RoomContext } from '../context/RoomContext';
 import Chat from "../components/Chat.jsx";
 import Game from "../components/Game.jsx";
 import PopupUsername from "../components/PopupUsername.jsx";
-import { users, user } from "../../../shared/userTypes";
+import { room, user } from "../../../shared/userTypes";
 import NavbarRoom from '../components/NavbarRoom';
 
 function Room() {
@@ -16,7 +16,7 @@ function Room() {
         setRoom(id)
     }, [id])
 
-    const emptyUsers = new users(new user(''))
+    const emptyUsers = new room(new user(''))
     const [roomUsers, setRoomUsers] = useState(emptyUsers)
 
     const [chatVisible, setChatVisible] = useState(window.innerWidth > 768)
