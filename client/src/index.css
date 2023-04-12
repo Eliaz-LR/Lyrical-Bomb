@@ -13,7 +13,7 @@
         @apply text-3xl block m-2;
     }
     button {
-        @apply border-black dark:border-white border-2 rounded-md p-2;
+        @apply border-black dark:border-white border-2 rounded-md p-2 m-2;
     }
     input {
         @apply bg-transparent border-2 rounded-md p-2 m-2;

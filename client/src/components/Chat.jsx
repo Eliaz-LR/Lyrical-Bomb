@@ -33,7 +33,7 @@ export default function Chat({roomId}) {
       }, [socket]);
 
     return (
-        <div className='flex flex-col overflow-auto h-full md:w-1/2 basis-1/3'>
+        <div className='flex flex-col overflow-auto h-full md:w-1/2 basis-full md:basis-1/3'>
             <h1>Received messages :</h1>
             <div className='flex flex-col-reverse overflow-auto grow border-2 border-b-0 p-1 border-gray-500'>
                 {[...messagesReceived].reverse().map(message => {

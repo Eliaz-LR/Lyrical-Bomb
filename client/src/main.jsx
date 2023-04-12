@@ -5,12 +5,10 @@ import Home from './pages/Home'
 import Room from './pages/Room'
 import { RoomProvider } from './context/RoomContext'
 import './index.css'
-import DarkModeButton from './components/DarkModeButton'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <div className='flex flex-col h-screen'>
-      <DarkModeButton />
       <BrowserRouter>
         <RoomProvider>
           <Routes>

@@ -20,7 +20,7 @@ export default function Game({settings, users}) {
     }
 
     return (
-        <div className='basis-2/3'>
+        <div className=' basis-full md:basis-2/3'>
             <div className='flex flex-col items-center justify-center h-full'>
                 <h1>Lyrical-Bomb</h1>
                 <div ref={refGameScreen} className='relative grow flex items-center justify-center w-full'>

@@ -5,6 +5,7 @@ import Chat from "../components/Chat.jsx";
 import Game from "../components/Game.jsx";
 import PopupUsername from "../components/PopupUsername.jsx";
 import { users, user } from "../../../shared/userTypes";
+import NavbarRoom from '../components/NavbarRoom';
 
 function Room() {
     const { id } = useParams();
@@ -18,6 +19,8 @@ function Room() {
     const emptyUsers = new users(new user(''))
     const [roomUsers, setRoomUsers] = useState(emptyUsers)
 
+    const [chatVisible, setChatVisible] = useState(window.innerWidth > 768)
+
     useEffect(() => {
         socket.on('room_users_update', (roomUsers) => {
             setRoomUsers(roomUsers)
@@ -28,12 +31,12 @@ function Room() {
     }, [socket])
     
     return (
-        <div className='flex flex-col items-center h-full'>
-            <h1>Room {id}, {roomUsers.users.length} users</h1>
+        <div className='flex flex-col h-full'>
+            <NavbarRoom roomID={id} nbUsers={roomUsers.users.length} chatVisible={chatVisible} setChatVisible={setChatVisible}/>
             {(username==='') && <PopupUsername />}
             <div className='flex flex-row h-full w-full'>
                 <Game settings={null} users={roomUsers}/>
-                <Chat roomId={id}/>
+                {chatVisible && <Chat roomId={id}/>}
             </div>
         </div>
     )
