@@ -1,12 +1,17 @@
 export class user {
     socketID: string;
     username: string;
+    isHost: boolean;
     constructor(socketID: string) {
         this.socketID = socketID;
         this.username = "";
+        this.isHost = false;
     }
     setUsername(username: string) {
         this.username = username;
+    }
+    setHost(isHost: boolean) {
+        this.isHost = isHost;
     }
     toString() {
         if (this.username !== "") {
@@ -29,5 +34,8 @@ export class users {
     }
     findUserByUsername(username: string): user | undefined {
         return this.users.find((user) => user.username === username);
+    }
+    containsHost(): boolean {
+        return this.users.some((user) => user.isHost);
     }
 }

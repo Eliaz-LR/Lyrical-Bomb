@@ -29,7 +29,7 @@ export default function Game({settings, users}) {
                         users.users.map((user) => {
                             let num = users.users.findIndex((userInList) => userInList.socketID === user.socketID)
                             let size = users.users.length
-                            return <Player key={user.socketID} username={user.username} widthDiv={width} heightDiv={height} num={ num } size={size}/>
+                            return <Player key={user.socketID} username={user.username} isHost={user.isHost} widthDiv={width} heightDiv={height} num={ num } size={size}/>
                         })
                     }
                 </div>

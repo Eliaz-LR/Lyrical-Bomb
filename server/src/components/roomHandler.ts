@@ -29,8 +29,11 @@ export const roomHandler = (socket: Socket) => {
 
     socket.on("username_set", (data) => {
         let roomUsers : users = rooms.get(data.room)!;
-        if (roomUsers.findUserBySocketID(socket.id)!==undefined) {
+        if (roomUsers.findUserBySocketID(socket.id)!==undefined) { // if user is in room
             roomUsers.findUserBySocketID(socket.id)!.setUsername(data.username);
+            if (roomUsers.users.length === 1) {
+                roomUsers.findUserBySocketID(socket.id)!.setHost(true);
+            }
         }
         console.log("Room users : ",roomUsers);
         socket.emit("room_users_update", roomUsers);
@@ -45,6 +48,9 @@ export const roomHandler = (socket: Socket) => {
                     rooms.delete(key);
                 }
                 else {
+                    if (roomUsers.containsHost() === false) {
+                        roomUsers.users[0].setHost(true);
+                    }
                     socket.to(key).emit("room_users_update", roomUsers);
                 }
             }
