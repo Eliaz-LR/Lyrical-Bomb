@@ -1,23 +1,12 @@
-import {useState, useContext, useRef, useEffect} from 'react'
-import { RoomContext } from '../context/RoomContext'
 import useSize from "../hooks/useSize"
 import Bomb from './GameComponents/Bomb'
 import Player from './GameComponents/Player'
+import Guess from './GameComponents/Guess'
 
 
 export default function Game({settings, users}) {
 
-    const { socket } = useContext(RoomContext)
-
     let {width, height, ref: refGameScreen} = useSize()
-
-    const [guess, setGuess] = useState('')
-    const sendGuess = (event) => {
-        event.preventDefault()
-        console.log(guess)
-        // todo: check if guess is correct locally + send to server with correct/incorrect
-        setGuess('')
-    }
 
     return (
         <div className=' basis-full md:basis-2/3'>
@@ -33,12 +22,7 @@ export default function Game({settings, users}) {
                         })
                     }
                 </div>
-                <form onSubmit={ sendGuess } className=''>
-                    <input placeholder='Guess a song' value={guess} className='' onChange={ (event) => {
-                        setGuess(event.target.value)
-                    }
-                } />
-                </form>
+                <Guess />
             </div>
         </div>
     )
