@@ -24,8 +24,10 @@ export class user {
 export class room {
     users: user[];
     isLaunched: boolean;
-    constructor(user: user) {
+    roomID: string;
+    constructor(user: user, roomID: string) {
         this.users = [user];
+        this.roomID = roomID;
         this.isLaunched = false;
     }
     push(user: user) {
