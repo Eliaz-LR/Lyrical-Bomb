@@ -1,10 +1,13 @@
 import { Socket } from "socket.io";
 import { room, user } from "../../../shared/userTypes";
 import { generateRoomID } from "./room/generateRoomID";
+import { gameHandler } from "./room/gameHandler";
 
 const rooms : room[] = [];
 
 export const roomHandler = (socket: Socket) => {
+
+    gameHandler(socket, rooms);
 
     socket.on('create_room', () => {
         const roomID = generateRoomID(rooms);

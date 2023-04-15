@@ -1,10 +1,34 @@
+import { useState, useContext, useEffect } from "react"
+import { RoomContext } from '../context/RoomContext'
 import useSize from "../hooks/useSize"
 import Bomb from './GameComponents/Bomb'
 import Player from './GameComponents/Player'
 import Guess from './GameComponents/Guess'
+import StartButton from "./GameComponents/StartReadyButton"
 
 
 export default function Game({settings, users}) {
+
+    const { socket, username } = useContext(RoomContext)
+
+    let thisUser = users.users.find((user) => user.username === username)
+
+    const [started, setStarted] = useState(false)
+
+    const [word, setWord] = useState('Dark')
+
+    useEffect(() => {
+        socket.on('game_started', (data) => {
+            setStarted(true)
+        })
+        socket.on('game_ended', (data) => {
+            setStarted(false)
+        })
+        return () => {
+            socket.off('game_started')
+            socket.off('game_ended')
+        }
+    }, [socket])
 
     let {width, height, ref: refGameScreen} = useSize()
 
@@ -13,7 +37,7 @@ export default function Game({settings, users}) {
             <div className='flex flex-col items-center justify-center h-full'>
                 <h1>Lyrical-Bomb</h1>
                 <div ref={refGameScreen} className='relative grow flex items-center justify-center w-full'>
-                    <Bomb word='Dark' />
+                    <Bomb word={word} />
                     {
                         users.users.map((user) => {
                             let num = users.users.findIndex((userInList) => userInList.socketID === user.socketID)
@@ -22,7 +46,8 @@ export default function Game({settings, users}) {
                         })
                     }
                 </div>
-                <Guess />
+                {started && <Guess />}
+                {!started && <StartButton thisUser={thisUser}/>}
             </div>
         </div>
     )
