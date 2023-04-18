@@ -2,7 +2,7 @@ import { Socket } from "socket.io";
 import { room } from "../../../../shared/userTypes";
 
 
-function startCountdown(socket: Socket, localRoom: room, rooms: room[], defaultCountdown: number = 10) {
+function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 10) {
     let countdown = defaultCountdown;
     localRoom.timerID = setInterval(() => {
         socket.emit("countdown", countdown);
@@ -13,12 +13,10 @@ function startCountdown(socket: Socket, localRoom: room, rooms: room[], defaultC
             socket.emit("room_users_update", localRoom);
             socket.to(localRoom.roomID).emit("room_users_update", localRoom);
         }
-        // A CHANGER : Actuellement fait une recherche dans la liste des rooms à chaque seconde pour voir si la room existe toujours...
-        if (rooms.find((room) => room.roomID === localRoom.roomID) === undefined) {
+        if (localRoom.users.length === 0) {
             clearInterval(localRoom.timerID);
         }
         console.log("Countdown : ", countdown);
-        console.log("Room length : ", localRoom.users.length);
     }, 1000);
 }
 
@@ -30,7 +28,7 @@ export const gameHandler = (socket: Socket, rooms : room[]) => {
         socket.emit("game_started", room);
         socket.to(room.roomID).emit("game_started", room);
         console.log("Game started in room : ",room.roomID);
-        startCountdown(socket, room, rooms);
+        startCountdown(socket, room);
     });
 
 }

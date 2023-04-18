@@ -43,7 +43,7 @@ export default function Game({users}) {
             <div className='flex flex-col items-center justify-center h-full'>
                 <h1>Lyrical-Bomb</h1>
                 <div className="">
-                    <Timer/>
+                    <Timer started={started}/>
                 </div>
                 <div ref={refGameScreen} className='relative grow flex items-center justify-center w-full'>
                     <Bomb word={word} />
