@@ -35,7 +35,7 @@ function Room() {
             <NavbarRoom roomID={id} nbUsers={roomUsers.users.length} chatVisible={chatVisible} setChatVisible={setChatVisible}/>
             {(username==='') && <PopupUsername />}
             <div className='flex flex-row h-full w-full'>
-                <Game settings={null} users={roomUsers}/>
+                <Game users={roomUsers}/>
                 {chatVisible && <Chat roomId={id}/>}
             </div>
         </div>
