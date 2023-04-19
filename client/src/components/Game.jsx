@@ -8,11 +8,11 @@ import StartButton from "./GameComponents/StartReadyButton"
 import Timer from "./GameComponents/Timer"
 
 
-export default function Game({users}) {
+export default function Game({users: usersRoom}) {
 
     const { socket, username } = useContext(RoomContext)
 
-    let thisUser = users.users.find((user) => user.username === username)
+    let thisUser = usersRoom.users.find((user) => user.username === username)
 
     const [started, setStarted] = useState(false)
 
@@ -49,9 +49,9 @@ export default function Game({users}) {
                 <div ref={refGameScreen} className='relative grow flex items-center justify-center w-full'>
                     <Bomb word={word} />
                     {
-                        users.users.map((user) => {
-                            let num = users.users.findIndex((userInList) => userInList.socketID === user.socketID)
-                            let size = users.users.length
+                        usersRoom.users.map((user) => {
+                            let num = usersRoom.users.findIndex((userInList) => userInList.socketID === user.socketID)
+                            let size = usersRoom.users.length
                             return <Player key={user.socketID} user={user} isHost={user.isHost} widthDiv={width} heightDiv={height} num={ num } size={size}/>
                         })
                     }

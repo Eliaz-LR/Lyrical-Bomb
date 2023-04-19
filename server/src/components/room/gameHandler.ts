@@ -43,4 +43,9 @@ export const gameHandler = (socket: Socket, rooms : room[]) => {
         startGame(socket, room);
     });
 
+    socket.on("is_game_launched", (data) => {
+        let room = rooms.find((room) => room.roomID === data.roomID)!;
+        socket.emit("launched", room.isLaunched);
+    });
+
 }

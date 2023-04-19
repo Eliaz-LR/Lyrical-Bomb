@@ -14,7 +14,7 @@ export const roomHandler = (socket: Socket) => {
         socket.emit('room_created', {room: roomID});
     });
 
-    socket.on("join_room", (data) => {        
+    socket.on("join_room", (data, callback) => {        
         socket.join(data.room);
         if (rooms.find((room) => room.roomID === data.room) === undefined){
             rooms.push(new room(new user(socket.id),data.room));
@@ -23,8 +23,13 @@ export const roomHandler = (socket: Socket) => {
         else {
             let room = rooms.find((room) => room.roomID === data.room)!;
             if (room.findUserBySocketID(socket.id) === undefined) {
-                console.log("NEW USER ADDED TO ROOM : ",data.room);
-                room.push(new user(socket.id)); // add user to existing room
+                if (room.isLaunched) {
+                    callback("Room is already launched");
+                }
+                else {
+                    room.push(new user(socket.id)); // add user to existing room
+                    console.log("NEW USER ADDED TO ROOM : ",data.room);
+                }
             }
         }
     });

@@ -12,7 +12,13 @@ function Room() {
     const { socket, username, setRoom } = useContext(RoomContext)
 
     useEffect(() => {
-        socket.emit('join_room', {room: id})
+
+        socket.emit('join_room', {room: id},(response) => {
+            console.log(response);
+            if (response === 'Room is already launched') {
+                window.location.href = '/'
+            }
+        });
         setRoom(id)
     }, [id])
 
