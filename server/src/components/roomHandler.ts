@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import { room, user } from "../../../shared/userTypes";
 import { generateRoomID } from "./room/generateRoomID";
-import { gameHandler } from "./room/gameHandler";
+import { gameHandler, endGame } from "./room/gameHandler";
 
 const rooms : room[] = [];
 
@@ -23,8 +23,8 @@ export const roomHandler = (socket: Socket) => {
         else {
             let room = rooms.find((room) => room.roomID === data.room)!;
             if (room.findUserBySocketID(socket.id) === undefined) {
-                room.push(new user(socket.id)); // add user to existing room
                 console.log("NEW USER ADDED TO ROOM : ",data.room);
+                room.push(new user(socket.id)); // add user to existing room
             }
         }
     });
@@ -43,6 +43,7 @@ export const roomHandler = (socket: Socket) => {
     });
 
     socket.on("disconnect", () => {
+        console.log('user disconnected: ', socket.id);
         rooms.forEach((room) => {
             if (room.findUserBySocketID(socket.id) !== undefined) {
                 room.users.splice(room.users.indexOf(room.findUserBySocketID(socket.id)!), 1);
@@ -50,6 +51,9 @@ export const roomHandler = (socket: Socket) => {
                     rooms.splice(rooms.indexOf(room), 1);
                 }
                 else {
+                    if (room.isLaunched) {
+                        endGame(socket, room)
+                    }
                     if (room.containsHost() === false) {
                         room.users[0].setHost(true);
                     }

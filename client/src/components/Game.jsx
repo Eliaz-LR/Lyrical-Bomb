@@ -29,6 +29,7 @@ export default function Game({users}) {
         })
         socket.on('game_ended', (data) => {
             setStarted(false)
+            //reset everything
         })
         return () => {
             socket.off('game_started')

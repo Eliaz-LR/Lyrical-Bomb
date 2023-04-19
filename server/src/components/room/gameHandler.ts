@@ -20,15 +20,27 @@ function startCountdown(socket: Socket, localRoom: room, defaultCountdown: numbe
     }, 1000);
 }
 
+function startGame(socket: Socket, localRoom: room) {
+    localRoom.isLaunched = true;
+    socket.emit("game_started", localRoom);
+    socket.to(localRoom.roomID).emit("game_started", localRoom);
+    console.log("Game started in room : ",localRoom.roomID);
+    startCountdown(socket, localRoom);
+}
+
+export function endGame(socket: Socket, localRoom: room) {
+    localRoom.isLaunched = false;
+    clearInterval(localRoom.timerID);
+    console.log("Game ended in room : ",localRoom.roomID);
+    socket.emit("game_ended", localRoom);
+    socket.to(localRoom.roomID).emit("game_ended", localRoom);
+}
+
 export const gameHandler = (socket: Socket, rooms : room[]) => {
 
     socket.on("start_game", (data) => {
         let room = rooms.find((room) => room.roomID === data.roomID)!;
-        room.isLaunched = true;
-        socket.emit("game_started", room);
-        socket.to(room.roomID).emit("game_started", room);
-        console.log("Game started in room : ",room.roomID);
-        startCountdown(socket, room);
+        startGame(socket, room);
     });
 
 }
