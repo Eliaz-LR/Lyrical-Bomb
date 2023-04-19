@@ -1,12 +1,19 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { RoomContext } from '../../context/RoomContext'
+import { guessChecker } from './guessChecker'
 
-export default function Guess(){
-
+export default function Guess({word}){
+    const { socket, room } = useContext(RoomContext)
     const [guess, setGuess] = useState('')
     const sendGuess = (event) => {
         event.preventDefault()
         console.log(guess)
-        // todo: check if guess is correct locally + send to server with correct/incorrect
+        if (guessChecker(guess, word)) {
+            socket.emit('next_turn_win', {roomID: room})
+        }
+        else {
+            console.log('wrong');
+        }
         setGuess('')
     }
 

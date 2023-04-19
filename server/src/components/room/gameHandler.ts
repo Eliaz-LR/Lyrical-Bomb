@@ -1,5 +1,7 @@
 import { Socket } from "socket.io";
-import { room } from "../../../../shared/userTypes";
+import { room, user } from "../../../../shared/userTypes";
+import { turn } from "../../../../shared/turnType";
+import { generateWord } from "./generateWord";
 
 
 function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 10) {
@@ -10,8 +12,7 @@ function startCountdown(socket: Socket, localRoom: room, defaultCountdown: numbe
         countdown--;
         if (countdown < 0) {
             countdown = defaultCountdown;
-            socket.emit("room_users_update", localRoom);
-            socket.to(localRoom.roomID).emit("room_users_update", localRoom);
+            nextTurn(localRoom, false, socket)
         }
         if (localRoom.users.length === 0) {
             clearInterval(localRoom.timerID);
@@ -20,12 +21,17 @@ function startCountdown(socket: Socket, localRoom: room, defaultCountdown: numbe
     }, 1000);
 }
 
+const previousTurns : turn[] = [];
+
 function startGame(socket: Socket, localRoom: room) {
     localRoom.isLaunched = true;
     socket.emit("game_started", localRoom);
     socket.to(localRoom.roomID).emit("game_started", localRoom);
     console.log("Game started in room : ",localRoom.roomID);
     startCountdown(socket, localRoom);
+    previousTurns.push(new turn(localRoom.users[0], generateWord()));
+    socket.emit("next_turn", previousTurns[0]);
+    socket.to(localRoom.roomID).emit("next_turn", previousTurns[0]);
 }
 
 export function endGame(socket: Socket, localRoom: room) {
@@ -36,16 +42,31 @@ export function endGame(socket: Socket, localRoom: room) {
     socket.to(localRoom.roomID).emit("game_ended", localRoom);
 }
 
-export const gameHandler = (socket: Socket, rooms : room[]) => {
 
+function nextTurn(localRoom: room, wonTurn : boolean, socket: Socket){
+    let nextUser: user = localRoom.users[localRoom.users.indexOf(previousTurns.at(-1)!.user)+1];
+    let localTurn: turn;
+    if (wonTurn) {
+        localTurn = new turn(nextUser, generateWord(previousTurns));
+    }
+    else {
+        localTurn = new turn(nextUser, previousTurns.at(-1)!.word);
+    }
+    socket.emit("next_turn", localTurn);
+    socket.to(localRoom.roomID).emit("next_turn", localTurn);
+    previousTurns.push(localTurn);
+}
+
+export const gameHandler = (socket: Socket, rooms : room[]) => {
+    
     socket.on("start_game", (data) => {
         let room = rooms.find((room) => room.roomID === data.roomID)!;
         startGame(socket, room);
     });
 
-    socket.on("is_game_launched", (data) => {
+    socket.on("next_turn_win",(data) => {
         let room = rooms.find((room) => room.roomID === data.roomID)!;
-        socket.emit("launched", room.isLaunched);
-    });
+        nextTurn(room, true, socket);
+    })
 
 }

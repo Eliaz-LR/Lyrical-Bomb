@@ -16,7 +16,7 @@ export default function Game({users: usersRoom}) {
 
     const [started, setStarted] = useState(false)
 
-    const [word, setWord] = useState('Dark')
+    const [word, setWord] = useState('')
 
     const settings = {
         numberOfHearts: 3,
@@ -34,6 +34,15 @@ export default function Game({users: usersRoom}) {
         return () => {
             socket.off('game_started')
             socket.off('game_ended')
+        }
+    }, [socket])
+
+    useEffect(() => {
+        socket.on('next_turn', (turn) => {
+            setWord(turn.word)
+        })
+        return () => {
+            socket.off('next_turn')
         }
     }, [socket])
 
@@ -56,7 +65,7 @@ export default function Game({users: usersRoom}) {
                         })
                     }
                 </div>
-                {started && <Guess />}
+                {started && <Guess word={ word }/>}
                 {!started && <StartButton thisUser={thisUser}/>}
             </div>
         </div>
