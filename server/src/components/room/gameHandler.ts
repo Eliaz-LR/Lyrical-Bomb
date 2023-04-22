@@ -3,10 +3,13 @@ import { room, user } from "../../../../shared/userTypes";
 import { turn } from "../../../../shared/turnType";
 import { generateWord } from "./generateWord";
 
+const timer_map = new Map<string, NodeJS.Timeout|undefined>();
 
 function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 10) {
     let countdown = defaultCountdown;
-    localRoom.timerID = setInterval(() => {
+    let timerID :NodeJS.Timer|undefined;
+    timer_map.set(localRoom.roomID, timerID);
+    timerID = setInterval(() => {
         socket.emit("countdown", countdown);
         socket.to(localRoom.roomID).emit("countdown", countdown);
         countdown--;
@@ -15,7 +18,7 @@ function startCountdown(socket: Socket, localRoom: room, defaultCountdown: numbe
             nextTurn(localRoom, false, socket)
         }
         if (localRoom.users.length === 0) {
-            clearInterval(localRoom.timerID);
+            clearInterval(timerID);
         }
         console.log("Countdown : ", countdown);
     }, 1000);
@@ -36,7 +39,8 @@ function startGame(socket: Socket, localRoom: room) {
 
 export function endGame(socket: Socket, localRoom: room) {
     localRoom.isLaunched = false;
-    clearInterval(localRoom.timerID);
+    clearInterval(timer_map.get(localRoom.roomID)!);
+    previousTurns.splice(0, previousTurns.length);
     console.log("Game ended in room : ",localRoom.roomID);
     socket.emit("game_ended", localRoom);
     socket.to(localRoom.roomID).emit("game_ended", localRoom);
@@ -64,9 +68,15 @@ export const gameHandler = (socket: Socket, rooms : room[]) => {
         startGame(socket, room);
     });
 
-    socket.on("next_turn_win",(data) => {
+    socket.on("win",(data) => {
         let room = rooms.find((room) => room.roomID === data.roomID)!;
-        nextTurn(room, true, socket);
+        let user = room.findUserBySocketID(socket.id);
+        user.score++;
+        // CRASHES -> TIMERID ?
+        socket.emit("room_users_update", room);
+        socket.to(room.roomID).emit("room_users_update", room);
+
+        // nextTurn(room, true, socket);
     })
 
 }

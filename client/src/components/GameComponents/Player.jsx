@@ -20,7 +20,7 @@ function Player({user, isHost, widthDiv, heightDiv, num, size}) {
         }} ref={refPlayer} className="absolute bg-purple-700 flex flex-col">
             <h2>{user.username} {host}</h2>
             <div className='flex justify-center'>
-                {user.numberOfHearts}
+                {user.score}
             </div>
         </div>
     )

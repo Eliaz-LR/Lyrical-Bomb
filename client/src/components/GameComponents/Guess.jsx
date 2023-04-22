@@ -9,7 +9,7 @@ export default function Guess({word}){
         event.preventDefault()
         console.log(guess)
         if (guessChecker(guess, word)) {
-            socket.emit('next_turn_win', {roomID: room})
+            socket.emit('win', {roomID: room})
         }
         else {
             console.log('wrong');
