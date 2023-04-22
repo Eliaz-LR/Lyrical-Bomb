@@ -38,11 +38,13 @@ export default function Game({users: usersRoom}) {
     }, [socket])
 
     useEffect(() => {
-        socket.on('next_turn', (turn) => {
+        function onNextTurn(turn) {
             setWord(turn.word)
-        })
+        }
+
+        socket.on('next_turn', onNextTurn)
         return () => {
-            socket.off('next_turn')
+            socket.off('next_turn', onNextTurn)
         }
     }, [socket])
 

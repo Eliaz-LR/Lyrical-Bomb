@@ -15,7 +15,7 @@ function startCountdown(socket: Socket, localRoom: room, defaultCountdown: numbe
         countdown--;
         if (countdown < 0) {
             countdown = defaultCountdown;
-            nextTurn(localRoom, false, socket)
+            nextTurn(localRoom, socket)
         }
         if (localRoom.users.length === 0) {
             clearInterval(timerID);
@@ -47,15 +47,10 @@ export function endGame(socket: Socket, localRoom: room) {
 }
 
 
-function nextTurn(localRoom: room, wonTurn : boolean, socket: Socket){
+function nextTurn(localRoom: room, socket: Socket){
     let nextUser: user = localRoom.users[localRoom.users.indexOf(previousTurns.at(-1)!.user)+1];
     let localTurn: turn;
-    if (wonTurn) {
-        localTurn = new turn(nextUser, generateWord(previousTurns));
-    }
-    else {
-        localTurn = new turn(nextUser, previousTurns.at(-1)!.word);
-    }
+    localTurn = new turn(nextUser, generateWord(previousTurns));
     socket.emit("next_turn", localTurn);
     socket.to(localRoom.roomID).emit("next_turn", localTurn);
     previousTurns.push(localTurn);
