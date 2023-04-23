@@ -24,8 +24,8 @@ function Room() {
 
     const emptyUsers = new room(new user(''))
     const [roomUsers, setRoomUsers] = useState(emptyUsers)
-
-    const [chatVisible, setChatVisible] = useState(window.innerWidth > 768)
+    const isDesktopRatio = window.innerWidth > 768
+    const [chatVisible, setChatVisible] = useState(isDesktopRatio)
 
     useEffect(() => {
         socket.on('room_users_update', (roomUsers) => {
@@ -41,7 +41,7 @@ function Room() {
             <NavbarRoom roomID={id} nbUsers={roomUsers.users.length} chatVisible={chatVisible} setChatVisible={setChatVisible}/>
             {(username==='') && <PopupUsername />}
             <div className='flex flex-row h-full w-full'>
-                <Game users={roomUsers}/>
+                {(isDesktopRatio || !chatVisible) && <Game users={roomUsers}/>}
                 {chatVisible && <Chat roomId={id}/>}
             </div>
         </div>
