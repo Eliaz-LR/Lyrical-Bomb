@@ -8,7 +8,7 @@ import StartButton from "./GameComponents/StartReadyButton"
 import Timer from "./GameComponents/Timer"
 
 
-export default function Game({users: usersRoom}) {
+export default function Game({users: usersRoom, shouldHide = false}) {
 
     const { socket, username } = useContext(RoomContext)
 
@@ -51,7 +51,7 @@ export default function Game({users: usersRoom}) {
     let {width, height, ref: refGameScreen} = useSize()
 
     return (
-        <div className=' basis-full md:basis-2/3'>
+        <div className={shouldHide? `hidden`:` basis-full md:basis-2/3`}>
             <div className='flex flex-col items-center justify-center h-full'>
                 <h1>Lyrical-Bomb</h1>
                 <div className="">

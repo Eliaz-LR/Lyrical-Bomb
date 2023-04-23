@@ -41,8 +41,8 @@ function Room() {
             <NavbarRoom roomID={id} nbUsers={roomUsers.users.length} chatVisible={chatVisible} setChatVisible={setChatVisible}/>
             {(username==='') && <PopupUsername />}
             <div className='flex flex-row h-full w-full'>
-                {(isDesktopRatio || !chatVisible) && <Game users={roomUsers}/>}
-                {chatVisible && <Chat roomId={id}/>}
+                <Game users={roomUsers} shouldHide={ !(isDesktopRatio || !chatVisible) }/>
+                <Chat roomId={id} shouldHide={ !chatVisible }/>
             </div>
         </div>
     )
