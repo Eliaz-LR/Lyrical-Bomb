@@ -6,7 +6,7 @@ import { guessHandler } from "./GuessChecker/guessHandler";
 
 const timer_map = new Map<string, NodeJS.Timeout|undefined>();
 
-function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 10) {
+function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 20) {
     let countdown = defaultCountdown;
     let timerID :NodeJS.Timer|undefined;
     timer_map.set(localRoom.roomID, timerID);
@@ -69,9 +69,9 @@ export const gameHandler = (socket: Socket, rooms : room[]) => {
         let user = room.findUserBySocketID(socket.id);
         let turn = previousTurns.at(-1)!;
 
-        guessHandler(data.guess, turn.word).then((isCorrect) => {
-            result(isCorrect);
-            if (isCorrect) {
+        guessHandler(data.guess, turn.word).then((guessResult) => {
+            result(guessResult);
+            if (guessResult.match) {
                 user.score++;
                 socket.emit("room_users_update", room);
                 socket.to(room.roomID).emit("room_users_update", room);

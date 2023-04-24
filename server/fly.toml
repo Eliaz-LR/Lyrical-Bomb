@@ -8,6 +8,7 @@ processes = []
 
 [env]
   PORT = "8080"
+  GENIUS_API_KEY = "_tk1JtnbRcsxWpTBdMCc7sn6vxGa-0gnNCWeZ4VijOto5vgxP_8xr_cbjC4jwK4i"
 
 [experimental]
   auto_rollback = true
