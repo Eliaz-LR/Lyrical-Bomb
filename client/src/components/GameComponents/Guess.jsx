@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
 import { RoomContext } from '../../context/RoomContext'
-import { guessChecker } from './guessChecker'
 
 export default function Guess({word}){
     const { socket, room } = useContext(RoomContext)
@@ -10,14 +9,16 @@ export default function Guess({word}){
     const sendGuess = (event) => {
         event.preventDefault()
         console.log(guess)
-        if (guessChecker(guess, word)) {
-            socket.emit('win', {roomID: room})
-            setDisabled(true)
-        }
-        else {
-            console.log('wrong');
-        }
-        setGuess('')
+        socket.emit('guess', {roomID: room, guess: guess}, (result) => {
+            if (result) {
+                console.log('correct');
+                setDisabled(true)
+            }
+            else {
+                console.log('wrong');
+            }
+            setGuess('')
+        })
     }
 
     useEffect(() => {

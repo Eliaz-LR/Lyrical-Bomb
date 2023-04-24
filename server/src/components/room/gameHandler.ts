@@ -2,6 +2,7 @@ import { Socket } from "socket.io";
 import { room, user } from "../../../../shared/userTypes";
 import { turn } from "../../../../shared/turnType";
 import { generateWord } from "./generateWord";
+import { guessHandler } from "./GuessChecker/guessHandler";
 
 const timer_map = new Map<string, NodeJS.Timeout|undefined>();
 
@@ -63,15 +64,19 @@ export const gameHandler = (socket: Socket, rooms : room[]) => {
         startGame(socket, room);
     });
 
-    socket.on("win",(data) => {
+    socket.on("guess", (data, result) => {
         let room = rooms.find((room) => room.roomID === data.roomID)!;
         let user = room.findUserBySocketID(socket.id);
-        user.score++;
-        // CRASHES -> TIMERID ?
-        socket.emit("room_users_update", room);
-        socket.to(room.roomID).emit("room_users_update", room);
+        let turn = previousTurns.at(-1)!;
 
-        // nextTurn(room, true, socket);
+        guessHandler(data.guess, turn.word).then((isCorrect) => {
+            result(isCorrect);
+            if (isCorrect) {
+                user.score++;
+                socket.emit("room_users_update", room);
+                socket.to(room.roomID).emit("room_users_update", room);
+            }
+        });
     })
 
 }
