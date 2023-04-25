@@ -1,10 +1,7 @@
-import { user } from "./userTypes";
 
 export class turn {
     word : string;
-    user : user;
-    constructor(user : user, word : string) {
-        this.user = user;
+    constructor(word : string) {
         this.word = word;
     }
 }

@@ -1,12 +1,12 @@
 import { Socket } from "socket.io";
-import { room, user } from "../../../../shared/userTypes";
+import { room } from "../../../../shared/userTypes";
 import { turn } from "../../../../shared/turnType";
 import { generateWord } from "./generateWord";
 import { guessHandler } from "./GuessChecker/guessHandler";
 
 const timer_map = new Map<string, NodeJS.Timeout|undefined>();
 
-function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 20) {
+function startCountdown(socket: Socket, localRoom: room, defaultCountdown: number = 25) {
     let countdown = defaultCountdown;
     let timerID :NodeJS.Timer|undefined;
     timer_map.set(localRoom.roomID, timerID);
@@ -33,7 +33,7 @@ function startGame(socket: Socket, localRoom: room) {
     socket.to(localRoom.roomID).emit("game_started", localRoom);
     console.log("Game started in room : ",localRoom.roomID);
     startCountdown(socket, localRoom);
-    previousTurns.push(new turn(localRoom.users[0], generateWord()));
+    previousTurns.push(new turn(generateWord()));
     socket.emit("next_turn", previousTurns[0]);
     socket.to(localRoom.roomID).emit("next_turn", previousTurns[0]);
 }
@@ -49,9 +49,8 @@ export function endGame(socket: Socket, localRoom: room) {
 
 
 function nextTurn(localRoom: room, socket: Socket){
-    let nextUser: user = localRoom.users[localRoom.users.indexOf(previousTurns.at(-1)!.user)+1];
     let localTurn: turn;
-    localTurn = new turn(nextUser, generateWord(previousTurns));
+    localTurn = new turn(generateWord(previousTurns));
     socket.emit("next_turn", localTurn);
     socket.to(localRoom.roomID).emit("next_turn", localTurn);
     previousTurns.push(localTurn);

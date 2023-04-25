@@ -24,7 +24,7 @@ export default function Guess({word}){
                 emoji = '❌'
             }
             setLoading(false);
-            setGuessResult(`${emoji} ${result.songTitle}`)
+            setGuessResult(`${emoji} ${result.text}`)
             setGuess('')
         })
     }
