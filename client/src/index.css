@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply bg-white text-black border-black dark:bg-zinc-800 dark:text-white dark:border-white;
-    }
-    h1 {
-        @apply text-4xl m-2;
-    }
-    h2 {
-        @apply text-3xl m-2;
-    }
-    button {
-        @apply border-black dark:border-white border-2 rounded-md p-2 m-2;
-    }
-    input {
-        @apply bg-transparent border-2 rounded-md p-2 m-2;
-    }
+  body {
+    @apply bg-white text-black border-black dark:bg-zinc-800 dark:text-white dark:border-white;
+  }
+  h1 {
+    @apply text-4xl m-2;
+  }
+  h2 {
+    @apply text-3xl m-2;
+  }
+  button {
+    @apply border-black dark:border-white border-2 rounded-md p-2 m-2;
+  }
+  input {
+    @apply bg-transparent border-2 rounded-md p-2 m-2;
+  }
 }
 
 @layer components {
-    .window {
-        @apply bg-white dark:bg-zinc-800  border-2 rounded-lg;
-    }
+  .window {
+    @apply bg-white dark:bg-zinc-800  border-2 rounded-lg;
+  }
 }
