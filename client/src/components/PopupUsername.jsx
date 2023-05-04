@@ -17,6 +17,7 @@ export default function PopupUsername() {
           <h1>Enter a username</h1>
           <form onSubmit={handleSubmit} className="flex flex-col">
             <input
+              type="search"
               value={usernameInput}
               onChange={(event) => {
                 setUsernameInput(event.target.value);

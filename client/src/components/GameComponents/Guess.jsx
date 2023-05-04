@@ -44,6 +44,7 @@ export default function Guess({ word }) {
       {loading && <h3>Loading...</h3>}
       <form onSubmit={sendGuess} className="">
         <input
+          type="search"
           placeholder="Guess a song"
           value={guess}
           disabled={disabled}

@@ -55,6 +55,7 @@ export default function Chat({ roomId, shouldHide = false }) {
           className="flex flex-row border-2 border-gray-500 mb-2"
         >
           <input
+            type="search"
             placeholder="Message..."
             value={message}
             className="basis-2/3 p-1"
